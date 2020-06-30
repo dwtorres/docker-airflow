@@ -109,7 +109,9 @@ fi
 
 case "$1" in
   webserver)
-    airflow initdb
+    #airflow initdb && airflow create_user --role Admin --username airflow --password airflow -e airflow@airflow.com -f airflow -l airflow
+    airflow list_users || (airflow initdb
+      && airflow create_user --role Admin --username airflow --password airflow -e airflow@airflow.com -f airflow -l airflow)
     if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ] || [ "$AIRFLOW__CORE__EXECUTOR" = "SequentialExecutor" ]; then
       # With the "Local" and "Sequential" executors it should all run in one container.
       airflow scheduler &
